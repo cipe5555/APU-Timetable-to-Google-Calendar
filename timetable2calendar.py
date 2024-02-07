@@ -6,10 +6,9 @@ from datetime import datetime, timedelta, date
 from email.message import EmailMessage
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from google.oauth2 import service_account
+from alive_progress import alive_bar
 
 load_dotenv('cred.env')
 
@@ -33,17 +32,10 @@ class Email:
             smtp.sendmail(self.sender, self.receiver, em.as_string())
 
 def get_credentials(SCOPES):
-    creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-            with open("token.json", "w") as token:
-                token.write(creds.to_json())
+    SERVICE_ACCOUNT_FILE = 'service_account.json'
+
+    creds = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
     return creds
 
 def get_week_start():
@@ -89,7 +81,8 @@ def create_event(service, entry):
             ],
         },
     }
-    return service.events().insert(calendarId='primary', body=event).execute()
+    
+    return service.events().insert(calendarId='jackpangchong@gmail.com', body=event).execute()
 
 def main():
     intake = "APU3F2311CS(AI)"
@@ -130,9 +123,11 @@ def main():
                         'Subject/Module': subject,
                         'Lecturer': lecturer
                     })
+            with alive_bar(len(timetable_data), title = 'Creating Events', theme = 'smooth') as bar:
 
-            for entry in timetable_data:
-                create_event(service, entry)
+                for entry in timetable_data:
+                    create_event(service, entry)
+                    bar()
 
             html_content = f"""
                 <html>
