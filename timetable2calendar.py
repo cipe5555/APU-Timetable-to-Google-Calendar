@@ -10,7 +10,10 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from alive_progress import alive_bar
 
-load_dotenv('cred.env')
+current_directory = os.path.dirname(__file__)
+env_file_path = os.path.join(current_directory, 'cred.env')
+
+load_dotenv(env_file_path)
 
 class Email:
     def __init__(self):
@@ -32,7 +35,7 @@ class Email:
             smtp.sendmail(self.sender, self.receiver, em.as_string())
 
 def get_credentials(SCOPES):
-    SERVICE_ACCOUNT_FILE = 'service_account.json'
+    SERVICE_ACCOUNT_FILE = os.path.join(current_directory, 'service_account.json')
 
     creds = service_account.Credentials.from_service_account_file(
         SERVICE_ACCOUNT_FILE, scopes=SCOPES)
