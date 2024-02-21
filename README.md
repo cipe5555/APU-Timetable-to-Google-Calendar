@@ -1,3 +1,6 @@
+## Project Workflow
+![Project Workflow](https://raw.githubusercontent.com/cipe5555/APU-Timetable-to-Google-Calendar/main/Screenshots/Project%20Flow.jpg)
+
 ## Features
 - Elective modules filtration.
 - Auto generated timetable for current/next week in Google Calendar with single click.
