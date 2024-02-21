@@ -24,5 +24,8 @@
 
 ![Email Automation](https://raw.githubusercontent.com/cipe5555/APU-Timetable-to-Google-Calendar/main/Screenshots/Email%20Automation.jpg)
 
+## System Demo
+![System Demo](https://raw.githubusercontent.com/cipe5555/APU-Timetable-to-Google-Calendar/main/Screenshots/Demo-gif.gif)
+
 ## License
 - MIT License
